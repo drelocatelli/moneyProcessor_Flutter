@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:moneyapp/Service/UserService.dart';
+
+import 'Service/UserService.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -8,6 +11,71 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  late String _email;
+  late String _senha;
+
+  Future<void> _Login() async {
+
+    bool validateForm = this._email.isNotEmpty && this._senha.isNotEmpty;
+
+    bool emailExists = await UserService.emailExists(this._email);
+
+    if(validateForm && emailExists) {
+      bool login = await UserService.login(this._email, this._senha);
+
+      if(login) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Sucesso"),
+                content: Text("Logado com sucesso!"),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('Tentar novamente'),
+                  ),
+                ],
+              );
+            }
+        );
+      }else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Erro"),
+                content: Text("Senha incorreta!"),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('Tentar novamente'),
+                  ),
+                ],
+              );
+            }
+        );
+      }
+    }else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Erro"),
+              content: Text("Não foi possível realizar o login"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('Tentar novamente'),
+                ),
+              ],
+            );
+          }
+      );
+    }
+
+  }
 
   Widget _loginForm() {
     return Column(
@@ -23,8 +91,13 @@ class _LoginState extends State<Login> {
                 Padding(
                   padding: EdgeInsets.all(40),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextField(
+                        onChanged: (text) {
+                          this._email = text;
+                        },
+                        keyboardType: TextInputType.emailAddress,
                         obscureText: false,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.alternate_email),
@@ -32,6 +105,10 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       TextField(
+                        onChanged: (text) {
+                          this._senha = text;
+                        },
+                        keyboardType: TextInputType.emailAddress,
                         obscureText: true,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock),
@@ -39,7 +116,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       ElevatedButton(
-                          onPressed: (){},
+                          onPressed: () => _Login(),
                           child: Text("Entrar")
                       ),
                     ],
