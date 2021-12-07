@@ -92,7 +92,6 @@ class _LoginState extends State<Login> {
                     Padding(
                       padding: EdgeInsets.all(40),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextField(
                             onChanged: (text) {
@@ -102,6 +101,9 @@ class _LoginState extends State<Login> {
                             obscureText: false,
                             decoration: InputDecoration(
                               prefixIcon: Icon(Icons.alternate_email),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black12)
+                              ),
                               labelText: 'E-mail',
                             ),
                           ),
@@ -114,12 +116,21 @@ class _LoginState extends State<Login> {
                             decoration: InputDecoration(
                               prefixIcon: Icon(Icons.lock),
                               labelText: 'Senha',
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black12)
+                              ),
                             ),
                           ),
-                          ElevatedButton(
-                              onPressed: () => _Login(),
-                              child: Text("Entrar")
-                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 30, left: 10, right: 10),
+                            child: ElevatedButton(
+                                onPressed: () => _Login(),
+                                style: ElevatedButton.styleFrom(
+                                    minimumSize: Size.fromHeight(40)
+                                ),
+                                child: Text("Entrar", style: TextStyle(fontSize: 20))
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -145,13 +156,25 @@ class _LoginState extends State<Login> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(padding: EdgeInsets.only(top: 35, bottom: 20), child: Text("Entre e faça acontecer!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
-            Image.asset("images/cofre.png", width: MediaQuery.of(context).size.width * 0.20),
-            Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: this._loginForm(),
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Text("Entre e faça acontecer!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 50),
+                  child: Image.asset("images/cofre.png", width: MediaQuery.of(context).size.width * 0.20),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                this._loginForm(),
+              ],
             ),
           ],
         ),

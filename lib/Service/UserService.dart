@@ -65,7 +65,7 @@ class UserService {
       final params = json.encode({"nome": "${nome}", "email": "${email}", "senha": "${senha}"});
 
       final request = await http.post(Uri.parse(_webservice), headers: _headers, body: params);
-      
+
       if(request.statusCode == 201) {
         return true;
       } else {

@@ -101,66 +101,84 @@ class _CadastroState extends State<Cadastro> {
 
   Widget _cadastroForm() {
     return Column(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.45,
-          decoration: new BoxDecoration(
-            color: Color.fromRGBO(246, 245, 247, 1),
-          ),
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextField(
-                      onChanged: (text) {
-                        this._nome = text;
-                      },
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.supervised_user_circle),
-                        labelText: 'Nome',
-                      ),
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            // height: MediaQuery.of(context).size.height * 0.40,
+            decoration: new BoxDecoration(
+              color: Color.fromRGBO(246, 245, 247, 1),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(40),
+                    child: Column(
+                      children: [
+                        TextField(
+                          onChanged: (text) {
+                            this._nome = text;
+                          },
+                          keyboardType: TextInputType.emailAddress,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.supervised_user_circle),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black12)
+                            ),
+                            labelText: 'Nome',
+                          ),
+                        ),
+                        TextField(
+                          onChanged: (text) {
+                            this._email = text;
+                          },
+                          keyboardType: TextInputType.emailAddress,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.alternate_email),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black12)
+                            ),
+                            labelText: 'E-mail',
+                          ),
+                        ),
+                        TextField(
+                          onChanged: (text) {
+                            this._senha = text;
+                          },
+                          keyboardType: TextInputType.emailAddress,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.lock),
+                            labelText: 'Senha',
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black12)
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 30, left: 10, right: 10),
+                          child: ElevatedButton(
+                              onPressed: () => _Cadastro(),
+                              style: ElevatedButton.styleFrom(
+                                  minimumSize: Size.fromHeight(40)
+                              ),
+                              child: Text("Finalizar", style: TextStyle(fontSize: 20))
+                          ),
+                        )
+                      ],
                     ),
-                    TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: (text) {
-                        this._email = text;
-                      },
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.alternate_email),
-                        labelText: 'E-mail',
-                      ),
-                    ),
-                    TextField(
-                      onChanged: (text) {
-                        this._senha = text;
-                      },
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.lock),
-                        labelText: 'Senha',
-                      ),
-                    ),
-                    ElevatedButton(
-                        onPressed: () => this._Cadastro(),
-                        child: Text("Finalizar")
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 30),
-          child: Text("Desenvolvido por drelocatelli"),
-        ),
-      ]
+          Padding(
+            padding: EdgeInsets.only(top: 30),
+            child: Text("Desenvolvido por drelocatelli"),
+          ),
+        ]
     );
   }
 
@@ -174,11 +192,26 @@ class _CadastroState extends State<Cadastro> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(padding: EdgeInsets.only(top: 35, bottom: 20), child: Text("Junte-se a nós!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
-            Image.asset("images/man.png", width: MediaQuery.of(context).size.width * 0.30),
-            this._cadastroForm(),
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Text("Junte-se a nós!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 50),
+                  child: Image.asset("images/man.png", width: MediaQuery.of(context).size.width * 0.30),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                this._cadastroForm(),
+              ],
+            ),
           ],
         ),
       ),
