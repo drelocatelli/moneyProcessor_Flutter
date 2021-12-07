@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moneyapp/Login.dart';
+
+import 'Service/UserService.dart';
 
 class Cadastro extends StatefulWidget {
   const Cadastro({Key? key}) : super(key: key);
@@ -9,6 +12,92 @@ class Cadastro extends StatefulWidget {
 }
 
 class _CadastroState extends State<Cadastro> {
+
+  late String _nome;
+  late String _email;
+  late String _senha;
+
+  Future<void> _Cadastro() async {
+
+    bool validateForm = this._nome.isNotEmpty && this._email.isNotEmpty && this._senha.isNotEmpty;
+
+    bool emailExists = await UserService.emailExists(this._email);
+
+    if(validateForm && !emailExists) {
+
+      bool cadastro = await UserService.cadastro(_nome, _email, _senha);
+
+      if(cadastro) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Sucesso"),
+                content: Text("Não foi possível cadastrar!"),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('Fazer login'),
+                  ),
+                ],
+              );
+            }
+        );
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login()));
+
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Erro"),
+                content: Text("Não foi possível cadastrar!"),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('Tentar novamente'),
+                  ),
+                ],
+              );
+            }
+        );
+      }
+
+    } else if(emailExists) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Erro"),
+              content: Text("Esse e-mail já foi cadastrado!"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('Tentar novamente'),
+                ),
+              ],
+            );
+          }
+      );
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Erro"),
+              content: Text("Não foi possível cadastrar!"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('Tentar novamente'),
+                ),
+              ],
+            );
+          }
+      );
+    }
+
+  }
 
   Widget _cadastroForm() {
     return Column(
@@ -27,6 +116,9 @@ class _CadastroState extends State<Cadastro> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextField(
+                      onChanged: (text) {
+                        this._nome = text;
+                      },
                       obscureText: false,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.supervised_user_circle),
@@ -34,6 +126,10 @@ class _CadastroState extends State<Cadastro> {
                       ),
                     ),
                     TextField(
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (text) {
+                        this._email = text;
+                      },
                       obscureText: false,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.alternate_email),
@@ -41,6 +137,9 @@ class _CadastroState extends State<Cadastro> {
                       ),
                     ),
                     TextField(
+                      onChanged: (text) {
+                        this._senha = text;
+                      },
                       obscureText: true,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock),
@@ -48,7 +147,7 @@ class _CadastroState extends State<Cadastro> {
                       ),
                     ),
                     ElevatedButton(
-                        onPressed: (){},
+                        onPressed: () => this._Cadastro(),
                         child: Text("Finalizar")
                     ),
                   ],

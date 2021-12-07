@@ -60,5 +60,19 @@ class UserService {
 
   }
 
+  static Future<bool> cadastro(String nome, String email, String senha) async {
+
+      final params = json.encode({"nome": "${nome}", "email": "${email}", "senha": "${senha}"});
+
+      final request = await http.post(Uri.parse(_webservice), headers: _headers, body: params);
+      
+      if(request.statusCode == 201) {
+        return true;
+      } else {
+        return false;
+      }
+
+  }
+
 
 }

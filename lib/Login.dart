@@ -81,50 +81,52 @@ class _LoginState extends State<Login> {
     return Column(
         children: [
           Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.40,
-            decoration: new BoxDecoration(
-              color: Color.fromRGBO(246, 245, 247, 1),
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(40),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextField(
-                        onChanged: (text) {
-                          this._email = text;
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.alternate_email),
-                          labelText: 'E-mail',
-                        ),
+              width: MediaQuery.of(context).size.width,
+              // height: MediaQuery.of(context).size.height * 0.40,
+              decoration: new BoxDecoration(
+                color: Color.fromRGBO(246, 245, 247, 1),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(40),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextField(
+                            onChanged: (text) {
+                              this._email = text;
+                            },
+                            keyboardType: TextInputType.emailAddress,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.alternate_email),
+                              labelText: 'E-mail',
+                            ),
+                          ),
+                          TextField(
+                            onChanged: (text) {
+                              this._senha = text;
+                            },
+                            keyboardType: TextInputType.emailAddress,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.lock),
+                              labelText: 'Senha',
+                            ),
+                          ),
+                          ElevatedButton(
+                              onPressed: () => _Login(),
+                              child: Text("Entrar")
+                          ),
+                        ],
                       ),
-                      TextField(
-                        onChanged: (text) {
-                          this._senha = text;
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock),
-                          labelText: 'Senha',
-                        ),
-                      ),
-                      ElevatedButton(
-                          onPressed: () => _Login(),
-                          child: Text("Entrar")
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
           Padding(
             padding: EdgeInsets.only(top: 30),
             child: Text("Desenvolvido por drelocatelli"),
