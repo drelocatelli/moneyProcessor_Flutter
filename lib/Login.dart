@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moneyapp/Panel.dart';
 import 'package:moneyapp/Service/UserService.dart';
 
 import 'Service/UserService.dart';
@@ -23,23 +24,8 @@ class _LoginState extends State<Login> {
 
     if(validateForm && emailExists) {
       bool login = await UserService.login(this._email, this._senha);
-
       if(login) {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text("Sucesso"),
-                content: Text("Logado com sucesso!"),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('Tentar novamente'),
-                  ),
-                ],
-              );
-            }
-        );
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => Panel() ));
       }else {
         showDialog(
             context: context,
@@ -166,8 +152,12 @@ class _LoginState extends State<Login> {
                   child: Text("Entre e faça acontecer!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 50),
-                  child: Image.asset("images/cofre.png", width: MediaQuery.of(context).size.width * 0.20),
+                  padding: EdgeInsets.only(top: 10),
+                  child: Image.asset("images/cofre.png", width: MediaQuery.of(context).size.width * 0.30),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  child: Container(),
                 ),
               ],
             ),

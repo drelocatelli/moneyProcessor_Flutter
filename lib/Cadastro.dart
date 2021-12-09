@@ -28,21 +28,6 @@ class _CadastroState extends State<Cadastro> {
       bool cadastro = await UserService.cadastro(_nome, _email, _senha);
 
       if(cadastro) {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text("Sucesso"),
-                content: Text("Não foi possível cadastrar!"),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('Fazer login'),
-                  ),
-                ],
-              );
-            }
-        );
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login()));
 
       } else {

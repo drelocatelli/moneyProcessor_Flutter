@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class UserService {
 
   static String _webservice = "${DBConnection.dbHost}/rest/v1/users";
@@ -12,19 +14,52 @@ class UserService {
 
   static List _userLoggedIn = [];
 
-  static List getUserLoggedIn() {
-    return _userLoggedIn;
-  }
-
-  static setUserLoggedIn(List user) {
-    _userLoggedIn = user;
-  }
-
   static Map<String, String> _headers = {
     'Content-type': 'application/json',
     'apiKey': '${DBConnection.secret}',
     'Authorization': 'Bearer: ${DBConnection.JWT}'
   };
+
+  //----------------------
+
+  static _setUserLoggedIn(List user) async {
+    _userLoggedIn = user;
+    _saveSession();
+  }
+
+  static getUserLoggedIn(String what) {
+    return _userLoggedIn[0][what];
+  }
+
+  static Future<String> getSession(String what) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return Future.value(prefs.getString(what));
+  }
+
+  static void _saveSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("nome", _userLoggedIn[0]["nome"]);
+    prefs.setString("email", _userLoggedIn[0]["email"]);
+    prefs.setString("senha", _userLoggedIn[0]["senha"]);
+  }
+
+
+  static Future<String> getUserIdByEmail() async {
+
+    try {
+      final response = await http.get(Uri.parse("${_webservice}?email=eq.${getUserLoggedIn("email")}&select=id"), headers: _headers);
+
+      var id;
+
+      id = json.decode(response.body);
+
+      return id[0]["id"].toString();
+
+    } catch(err) {
+      return "error";
+    }
+
+  }
 
   static Future<bool> emailExists(String email) async {
 
@@ -47,13 +82,9 @@ class UserService {
     try {
       final response = await http.get(Uri.parse("${_webservice}?email=eq.${email}&senha=eq.${senha}"), headers: _headers);
 
-      setUserLoggedIn(json.decode(response.body));
-
-      if(getUserLoggedIn().length != 0) {
+        _setUserLoggedIn(json.decode(response.body));
         return true;
-      }
 
-      return false;
     } catch(err) {
       return false;
     }
