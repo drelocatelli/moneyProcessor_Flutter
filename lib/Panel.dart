@@ -20,7 +20,12 @@ class _PanelState extends State<Panel> {
   String _saldo = "0.00";
 
   void atualizaSaldo() async {
-    this._saldo = await TransactionService.getSaldoValue();
+    await TransactionService.getSaldoValue()
+    .then((value) {
+      setState(() {
+        this._saldo = value;
+      });
+    });
   }
 
   void _deslogar() async {
@@ -79,10 +84,13 @@ class _PanelState extends State<Panel> {
   }
 
   @override
-  Widget build(BuildContext context)  {
-
+  void initState() {
+    super.initState();
     atualizaSaldo();
+  }
 
+  @override
+  Widget build(BuildContext context)  {
     return Scaffold(
         appBar: AppBar(
         shadowColor: Colors.transparent,

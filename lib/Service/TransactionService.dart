@@ -24,7 +24,6 @@ class TransactionService {
 
     return calculo.toString();
 
-
   }
 
   static Future<String> getDespesaTotal() async {
