@@ -30,25 +30,48 @@ class _PanelState extends State<Panel> {
     });
   }
 
-  Widget _header() {
+  Widget _headerContent() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.2,
+      height: MediaQuery.of(context).size.height * 0.16,
       width: MediaQuery.of(context).size.width,
       child: DecoratedBox(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("Olá, ${UserService.getUserLoggedIn("nome")}", style: TextStyle(fontSize: 22, color: Colors.white)),
+            Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Text("Olá, ${UserService.getUserLoggedIn("nome")}", style: TextStyle(fontSize: 22, color: Colors.white)),
+            ),
             Padding(
               padding: EdgeInsets.only(top: 10),
-              child: Text("Saldo: R\$ ${_saldo}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+              child: Text("Saldo: R\$ ${_saldo}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
             )
           ],
         ),
         decoration: BoxDecoration(
           color: Colors.lightBlueAccent,
         ),
+      ),
+    );
+  }
+
+  Widget _header() {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.2,
+      color: Colors.transparent,
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height * 0.19,
+            decoration: BoxDecoration(
+              color: Colors.lightBlueAccent,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(36), bottomRight: Radius.circular(36)),
+                ),
+          ),
+          _headerContent(),
+        ],
       ),
     );
   }
@@ -87,9 +110,49 @@ class _PanelState extends State<Panel> {
     );
   }
 
+  Widget _listContainer() {
+    TransactionService.atualizaDespesas();
+    print(TransactionService.despesas.toString());
+
+    return ListView.separated(
+        shrinkWrap: true,
+        itemCount: TransactionService.despesas.length,
+        itemBuilder: (context, index) {
+          return Container(
+            height: 60,
+            color: Colors.white,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("${TransactionService.despesas[index]["title"]}"),
+                      Text("R\$ ${TransactionService.despesas[index]["value"]}",
+                          style: TextStyle(color: Colors.red))
+                    ],
+                  ),
+                  Text("${TransactionService.despesas[index]["created_at"]}", style: TextStyle(fontSize: 12, color: Colors.grey))
+                ],
+              ),
+            ),
+          );
+        }, separatorBuilder: (BuildContext context, int index) => const Divider(),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    () async {
+      bool checkSession = await UserService.checksession();
+      if(!checkSession) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login() ));
+      }
+    }();
     atualizaSaldo();
   }
 
@@ -110,11 +173,12 @@ class _PanelState extends State<Panel> {
         children: [
           Expanded(
             child: Container(
-              color: Color.fromRGBO(240, 240, 240, 1),
+              color: Colors.white,
               width: MediaQuery.of(context).size.width,
               child: Column(
                 children: [
-                  this._header(),
+                  _header(),
+                  _listContainer()
                 ],
               ),
             ),

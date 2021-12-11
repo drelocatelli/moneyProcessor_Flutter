@@ -8,6 +8,7 @@ import 'package:moneyapp/Service/UserService.dart';
 class TransactionService {
 
   static String _webservice = "${DBConnection.dbHost}/rest/v1/transaction";
+  static List<dynamic> despesas = [];
 
   static Map<String, String> _headers = {
     'Content-type': 'application/json',
@@ -24,6 +25,22 @@ class TransactionService {
 
     return calculo.toString();
 
+  }
+
+  static Future<bool> atualizaDespesas() async {
+    print(UserService.getUserIdByEmail());
+    try {
+      final request = await http.get(Uri.parse(
+          "${_webservice}?user_id=eq.${await UserService.getUserIdByEmail()}&type=eq.d&select=*"),
+          headers: _headers);
+
+      List<dynamic> response = json.decode(request.body);
+      despesas = response;
+
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 
   static Future<String> getDespesaTotal() async {
