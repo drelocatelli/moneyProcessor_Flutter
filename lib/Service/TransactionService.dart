@@ -9,6 +9,9 @@ class TransactionService {
 
   static String _webservice = "${DBConnection.dbHost}/rest/v1/transaction";
   static List<dynamic> despesas = [];
+  static List<dynamic> receitas = [];
+  static List<dynamic> tudo = [];
+
 
   static Map<String, String> _headers = {
     'Content-type': 'application/json',
@@ -27,6 +30,22 @@ class TransactionService {
 
   }
 
+  static Future<bool> atualizaReceitas() async {
+    print(UserService.getUserIdByEmail());
+    try {
+      final request = await http.get(Uri.parse(
+          "${_webservice}?user_id=eq.${await UserService.getUserIdByEmail()}&type=eq.r&select=*"),
+          headers: _headers);
+
+      List<dynamic> response = json.decode(request.body);
+      receitas = response;
+
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
   static Future<bool> atualizaDespesas() async {
     print(UserService.getUserIdByEmail());
     try {
@@ -36,6 +55,22 @@ class TransactionService {
 
       List<dynamic> response = json.decode(request.body);
       despesas = response;
+
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  static Future<bool> atualizaTudo() async {
+    print(UserService.getUserIdByEmail());
+    try {
+      final request = await http.get(Uri.parse(
+          "${_webservice}?user_id=eq.${await UserService.getUserIdByEmail()}&select=*"),
+          headers: _headers);
+
+      List<dynamic> response = json.decode(request.body);
+      tudo = response;
 
       return true;
     } catch (err) {

@@ -111,12 +111,11 @@ class _PanelState extends State<Panel> {
   }
 
   Widget _listContainer() {
-    TransactionService.atualizaDespesas();
-    print(TransactionService.despesas.toString());
+    TransactionService.atualizaTudo();
 
     return ListView.separated(
         shrinkWrap: true,
-        itemCount: TransactionService.despesas.length,
+        itemCount: TransactionService.tudo.length,
         itemBuilder: (context, index) {
           return Container(
             height: 60,
@@ -130,12 +129,12 @@ class _PanelState extends State<Panel> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${TransactionService.despesas[index]["title"]}"),
-                      Text("R\$ ${TransactionService.despesas[index]["value"]}",
-                          style: TextStyle(color: Colors.red))
+                      Text("${TransactionService.tudo[index]["title"]}"),
+                      Text("R\$ ${TransactionService.tudo[index]["value"]}",
+                          style: TextStyle(color: (TransactionService.tudo[index]["type"] == "d" ? Colors.red : Colors.green) ))
                     ],
                   ),
-                  Text("${TransactionService.despesas[index]["created_at"]}", style: TextStyle(fontSize: 12, color: Colors.grey))
+                  Text("${TransactionService.tudo[index]["created_at"]}", style: TextStyle(fontSize: 12, color: Colors.grey))
                 ],
               ),
             ),
