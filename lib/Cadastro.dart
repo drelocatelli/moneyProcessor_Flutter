@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moneyapp/Login.dart';
+import 'package:get/get.dart';
 
 import 'Service/UserService.dart';
 
@@ -19,8 +20,8 @@ class _CadastroState extends State<Cadastro> {
 
   Future<void> _Cadastro() async {
 
-    bool validateForm = this._nome.isNotEmpty && this._email.isNotEmpty && this._senha.isNotEmpty;
-
+    bool validateEmail = GetUtils.isEmail(this._email);
+    bool validateForm = this._nome.isNotEmpty && this._email.isNotEmpty && this._senha.isNotEmpty && validateEmail;
     bool emailExists = await UserService.emailExists(this._email);
 
     if(validateForm && !emailExists) {

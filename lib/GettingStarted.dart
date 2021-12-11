@@ -2,7 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:moneyapp/Cadastro.dart';
 import 'package:moneyapp/Login.dart';
-  import 'model/Slide.dart';
+import 'package:moneyapp/Panel.dart';
+  import 'Service/UserService.dart';
+  import 'package:get/get.dart';
+import 'model/Slide.dart';
 
 
   class GettingStarted extends StatefulWidget {
@@ -13,7 +16,6 @@ import 'package:moneyapp/Login.dart';
   }
 
   class _GettingStartedState extends State<GettingStarted> {
-
     Color corFundo = Colors.lightBlueAccent;
 
     Widget _slidePage(index) {
@@ -75,6 +77,23 @@ import 'package:moneyapp/Login.dart';
 
 
     }
+
+    @override
+    void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    () async {
+      bool checkSession = await UserService.checksession();
+      if(checkSession) {
+        Future.delayed(
+            Duration.zero,
+                () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => Panel() ))
+        );
+      }
+    }();
+
+  }
 
     @override
     Widget build(BuildContext context) {

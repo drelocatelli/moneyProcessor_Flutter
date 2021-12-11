@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:moneyapp/Login.dart';
 import 'package:moneyapp/Service/TransactionService.dart';
 import 'package:moneyapp/Service/UserService.dart';
@@ -26,10 +28,6 @@ class _PanelState extends State<Panel> {
         this._saldo = value;
       });
     });
-  }
-
-  void _deslogar() async {
-    print("TODO: Deslogar");
   }
 
   Widget _header() {
@@ -70,7 +68,13 @@ class _PanelState extends State<Panel> {
               ),
             ),
             PopupMenuItem(
-              onTap: () => _deslogar(),
+              onTap: () async {
+                final navigator = Navigator.of(context);
+                await Future.delayed(Duration.zero);
+                navigator.push(
+                  MaterialPageRoute(builder: (_) => Login()),
+                );
+              },
               child: Row(
                 children: [
                   Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.logout, color: Colors.black)),

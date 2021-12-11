@@ -43,6 +43,14 @@ class UserService {
     prefs.setString("senha", _userLoggedIn[0]["senha"]);
   }
 
+  static Future<bool> checksession() async {
+    String email = await getSession("email");
+    String senha = await getSession("senha");
+    if(await login(email, senha)) {
+      return true;
+    }
+    return false;
+  }
 
   static Future<String> getUserIdByEmail() async {
 
