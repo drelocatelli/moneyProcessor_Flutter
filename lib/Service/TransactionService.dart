@@ -30,8 +30,59 @@ class TransactionService {
 
   }
 
+  static Future<bool> addReceita(double value, String date, String title) async {
+
+    try{
+
+      final params = json.encode({
+        "value": "${value}",
+        "date": "${date}",
+        "title": "${title}",
+        "type": "r",
+        "user_id": "${await UserService.getUserIdByEmail()}"
+      });
+
+      final request = await http.post(Uri.parse(
+          "${_webservice}"), headers: _headers, body: params);
+
+      if(request.statusCode == 201) {
+        return true;
+      }
+
+      return false;
+    }catch(err) {
+      return false;
+    }
+
+  }
+
+  static Future<bool> addDespesa(double value, String date, String title) async {
+
+    try{
+
+      final params = json.encode({
+            "value": "${value}",
+            "date": "${date}",
+            "title": "${title}",
+            "type": "d",
+            "user_id": "${await UserService.getUserIdByEmail()}"
+      });
+
+      final request = await http.post(Uri.parse(
+          "${_webservice}"), headers: _headers, body: params);
+
+      if(request.statusCode == 201) {
+        return true;
+      }
+
+      return false;
+    }catch(err) {
+      return false;
+    }
+    
+  }
+
   static Future<bool> atualizaReceitas() async {
-    print(UserService.getUserIdByEmail());
     try {
       final request = await http.get(Uri.parse(
           "${_webservice}?user_id=eq.${await UserService.getUserIdByEmail()}&type=eq.r&select=*"),

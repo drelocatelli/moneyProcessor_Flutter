@@ -92,7 +92,10 @@ class _PanelState extends State<Panel> {
       child: PopupMenuButton(
         itemBuilder: (context) => [
           PopupMenuItem(
-            onTap: () => atualizaSaldo(),
+            onTap: () => {
+              _carregaLista(),
+              atualizaSaldo()
+            },
             child: Row(
               children: [
                 Padding(
@@ -107,7 +110,7 @@ class _PanelState extends State<Panel> {
               UserService.clearSession();
               final navigator = Navigator.of(context);
               await Future.delayed(Duration.zero);
-              navigator.push(
+              navigator.pushReplacement(
                 MaterialPageRoute(builder: (_) => Login()),
               );
             },
@@ -177,18 +180,20 @@ class _PanelState extends State<Panel> {
   }
 
   Widget _menuFlutuante() {
+
+    double opacity = 0.6;
+
     return SpeedDial(
       child: Icon(Icons.add),
       visible: true,
       curve: Curves.bounceIn,
       overlayColor: Colors.black,
       overlayOpacity: 0.5,
-      // onOpen: () => print('OPENING DIAL'),
       // onClose: () => print('DIAL CLOSED'),
       tooltip: 'Adicionar',
       heroTag: 'speed-dial-hero-tag',
-      backgroundColor: Colors.pink.withOpacity(0.4),
-      foregroundColor: Colors.white.withOpacity(0.6),
+      backgroundColor: Colors.pink.withOpacity(opacity),
+      foregroundColor: Colors.white.withOpacity(opacity),
       elevation: 0.0,
       shape: CircleBorder(),
       children: [
@@ -210,26 +215,26 @@ class _PanelState extends State<Panel> {
     );
   }
 
-  Widget _calendario() {
-    // return SizedBox(
-    //   height: 50,
-    //   child: Wrap(
-    //     children: [
-    //       TableCalendar(
-    //         calendarFormat: CalendarFormat.week,
-    //         locale: Locale("fr", "FR"),
-    //         firstDay: DateTime.utc(2010, 10, 16),
-    //         lastDay: DateTime.utc(2030, 3, 14),
-    //         focusedDay: DateTime.now(),
-    //         daysOfWeekVisible: false,
-    //       ),
-    //     ],
-    //   )
-    // );
+  void _monthYear() {
+    final todayDate = DateTime.now();
+    showDatePicker(
+      context: context,
+      initialDatePickerMode: DatePickerMode.year,
+      initialEntryMode: DatePickerEntryMode.calendar,
+      initialDate: DateTime(todayDate.year - 18, todayDate.month, todayDate.day),
+      firstDate: DateTime(todayDate.year - 90, todayDate.month, todayDate.day),
+      lastDate: DateTime(todayDate.year - 18, todayDate.month, todayDate.day),
+    ).then((value) {
+      print(value);
+    });
+  }
 
+  Widget _calendario() {
     return Container(
       child: TextButton(
-        onPressed: () {},
+        onPressed: () {
+          _monthYear();
+        },
         child: Text("MÊS / ANO", style: TextStyle(color: Colors.black)),
       ),
     );

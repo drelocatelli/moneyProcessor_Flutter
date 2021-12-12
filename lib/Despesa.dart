@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:moneyapp/Service/TransactionService.dart';
+
+import 'Panel.dart';
 
 class Despesa extends StatefulWidget {
   const Despesa({Key? key}) : super(key: key);
@@ -8,6 +11,69 @@ class Despesa extends StatefulWidget {
 }
 
 class _DespesaState extends State<Despesa> {
+
+  double _value = 0.0;
+  String _date = "";
+  String _title = "";
+
+  void addDespesa() async {
+    if(_title.isNotEmpty && _date.isNotEmpty) {
+
+      RegExp regexDate = new RegExp(r"(\d){2}\/(\d){4}");
+      bool verifyDate = regexDate.hasMatch(_date);
+      if(verifyDate) {
+        if(await TransactionService.addDespesa(_value, _date, _title)) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Panel() ));
+        }else {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text("Ocorreu um erro"),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text('Tentar novamente'),
+                    ),
+                  ],
+                );
+              }
+          );
+        }
+      }else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Formato de data inválido!"),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('Tentar novamente'),
+                  ),
+                ],
+              );
+            }
+        );
+      }
+    }else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Verifique campos nulos"),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('Tentar novamente'),
+                ),
+              ],
+            );
+          }
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +97,9 @@ class _DespesaState extends State<Despesa> {
                   textAlign: TextAlign.right,
                   keyboardType: TextInputType.number,
                   style: TextStyle(color: Colors.white, fontSize: 28),
+                  onChanged: (text) {
+                    _value = double.tryParse(text) ?? 0.0;
+                  },
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintStyle: TextStyle(color: Colors.white, fontSize: 28),
@@ -47,11 +116,17 @@ class _DespesaState extends State<Despesa> {
                 TextField(
                   keyboardType: TextInputType.datetime,
                   textAlign: TextAlign.center,
+                  onChanged: (text) {
+                    _date = text;
+                  },
                   decoration: InputDecoration(
                       labelText: "Data (MM/AAAA)"
                   ),
                 ),
                 TextField(
+                  onChanged: (text) {
+                    _title = text;
+                  },
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                       labelText: "Título"
@@ -62,7 +137,9 @@ class _DespesaState extends State<Despesa> {
                   child: Container(),
                 ),
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      addDespesa();
+                    },
                     child: Text("Adicionar")
                 )
               ],
