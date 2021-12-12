@@ -48,7 +48,7 @@ class _DespesaState extends State<Despesa> {
                   keyboardType: TextInputType.datetime,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
-                      labelText: "MM/AAAA"
+                      labelText: "Data (MM/AAAA)"
                   ),
                 ),
                 TextField(

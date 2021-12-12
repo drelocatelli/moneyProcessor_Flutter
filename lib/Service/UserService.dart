@@ -51,8 +51,10 @@ class UserService {
   static Future<bool> checksession() async {
     String email = await getSession("email");
     String senha = await getSession("senha");
-    if(await login(email, senha)) {
-      return true;
+    if(email != null && senha != null) {
+      if(await login(email, senha)){
+        return true;
+      }
     }
     return false;
   }

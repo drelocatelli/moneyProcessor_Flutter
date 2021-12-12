@@ -183,11 +183,11 @@ class _PanelState extends State<Panel> {
       shape: CircleBorder(),
       children: [
         SpeedDialChild(
-            child: Icon(Icons.arrow_downward),
-            backgroundColor: Colors.red,
-            label: 'Despesa',
-            labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => Despesa() )),
+          child: Icon(Icons.arrow_downward),
+          backgroundColor: Colors.red,
+          label: 'Despesa',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => Despesa() )),
         ),
         SpeedDialChild(
           child: Icon(Icons.arrow_upward),
@@ -203,7 +203,7 @@ class _PanelState extends State<Panel> {
   @override
   void initState() {
     super.initState();
-    () async {
+        () async {
       bool checkSession = await UserService.checksession();
       if (!checkSession) {
         Navigator.of(context)

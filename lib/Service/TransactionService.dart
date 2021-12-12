@@ -63,7 +63,6 @@ class TransactionService {
   }
 
   static Future<bool> atualizaTudo() async {
-    print(UserService.getUserIdByEmail());
     try {
       final request = await http.get(Uri.parse(
           "${_webservice}?user_id=eq.${await UserService.getUserIdByEmail()}&select=*"),

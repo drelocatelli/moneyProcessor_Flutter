@@ -49,7 +49,7 @@ class _ReceitaState extends State<Receita> {
                   keyboardType: TextInputType.datetime,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
-                    labelText: "MM/AAAA"
+                    labelText: "Data (MM/AAAA)"
                   ),
                 ),
                 TextField(
