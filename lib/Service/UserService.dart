@@ -43,6 +43,11 @@ class UserService {
     prefs.setString("senha", _userLoggedIn[0]["senha"]);
   }
 
+  static void clearSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
+
   static Future<bool> checksession() async {
     String email = await getSession("email");
     String senha = await getSession("senha");

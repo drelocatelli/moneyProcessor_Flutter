@@ -6,6 +6,8 @@ import 'package:moneyapp/Panel.dart';
   import 'Service/UserService.dart';
   import 'package:get/get.dart';
 import 'model/Slide.dart';
+import 'package:after_layout/after_layout.dart';
+
 
 
   class GettingStarted extends StatefulWidget {
@@ -15,7 +17,7 @@ import 'model/Slide.dart';
     _GettingStartedState createState() => _GettingStartedState();
   }
 
-  class _GettingStartedState extends State<GettingStarted> {
+  class _GettingStartedState extends State<GettingStarted> with AfterLayoutMixin<GettingStarted> {
     Color corFundo = Colors.lightBlueAccent;
 
     Widget _slidePage(index) {
@@ -74,26 +76,33 @@ import 'model/Slide.dart';
           });
         },
       );
-
-
     }
 
     @override
-    void initState() {
-    // TODO: implement initState
-    super.initState();
+    void afterFirstLayout(BuildContext context) async {
+        bool checkSession = await UserService.checksession();
+        if(checkSession) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Panel() )
+          );
+        }
+    }
 
-    () async {
-      bool checkSession = await UserService.checksession();
-      if(checkSession) {
-        Future.delayed(
-            Duration.zero,
-                () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => Panel() ))
-        );
-      }
-    }();
+    // @override
+    // void initState() {
+    // // TODO: implement initState
+    // super.initState();
 
-  }
+    // () async {
+    //   bool checkSession = await UserService.checksession();
+    //   if(checkSession) {
+    //     Future.delayed(
+    //         Duration.zero,
+    //             () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => Panel() ))
+    //     );
+    //   }
+    // }();
+
+  // }
 
     @override
     Widget build(BuildContext context) {
