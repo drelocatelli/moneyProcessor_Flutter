@@ -127,6 +127,8 @@ class _PanelState extends State<Panel> {
   Widget _listContainer() {
     TransactionService.atualizaTudo();
 
+    RegExp dateRegex = RegExp(r"(\d){4}-(\d){2}-(\d){2}");
+
     return ListView.separated(
       shrinkWrap: true,
       itemCount: TransactionService.tudo.length,
@@ -155,7 +157,7 @@ class _PanelState extends State<Panel> {
                                     : Colors.green)))
                       ],
                     ),
-                    Text("${TransactionService.tudo[index]["created_at"]}",
+                    Text(dateRegex.firstMatch(TransactionService.tudo[index]["created_at"])!.group(0).toString().split('-').reversed.join('/'),
                         style: TextStyle(fontSize: 12, color: Colors.grey))
                   ],
                 ),
@@ -234,7 +236,10 @@ class _PanelState extends State<Panel> {
                 color: Colors.white,
                 width: MediaQuery.of(context).size.width,
                 child: Column(
-                  children: [_header(), _listContainer()],
+                  children: [
+                    _header(),
+                    (TransactionService.tudo.length >= 1) ? _listContainer() : Container()
+                  ],
                 ),
               ),
             ),
