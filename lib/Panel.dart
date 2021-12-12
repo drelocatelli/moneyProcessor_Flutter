@@ -10,6 +10,7 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import 'Despesa.dart';
 import 'Receita.dart';
@@ -124,12 +125,15 @@ class _PanelState extends State<Panel> {
     );
   }
 
-  Widget _listContainer() {
-    TransactionService.atualizaTudo();
+  void _carregaLista() async {
+    await TransactionService.atualizaTudo();
+  }
 
+  Widget _listContainer() {
     RegExp dateRegex = RegExp(r"(\d){4}-(\d){2}-(\d){2}");
 
     return ListView.separated(
+      physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: TransactionService.tudo.length,
       itemBuilder: (context, index) {
@@ -157,8 +161,12 @@ class _PanelState extends State<Panel> {
                                     : Colors.green)))
                       ],
                     ),
-                    Text(dateRegex.firstMatch(TransactionService.tudo[index]["created_at"])!.group(0).toString().split('-').reversed.join('/'),
-                        style: TextStyle(fontSize: 12, color: Colors.grey))
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Text(dateRegex.firstMatch(TransactionService.tudo[index]["created_at"])!.group(0).toString().split('-').reversed.join('/'),
+                          style: TextStyle(fontSize: 12, color: Color.fromRGBO(
+                              179, 179, 179, 1.0))),
+                    )
                   ],
                 ),
               ),
@@ -179,9 +187,9 @@ class _PanelState extends State<Panel> {
       // onClose: () => print('DIAL CLOSED'),
       tooltip: 'Adicionar',
       heroTag: 'speed-dial-hero-tag',
-      backgroundColor: Colors.pink,
-      foregroundColor: Colors.white,
-      elevation: 8.0,
+      backgroundColor: Colors.pink.withOpacity(0.4),
+      foregroundColor: Colors.white.withOpacity(0.6),
+      elevation: 0.0,
       shape: CircleBorder(),
       children: [
         SpeedDialChild(
@@ -202,6 +210,31 @@ class _PanelState extends State<Panel> {
     );
   }
 
+  Widget _calendario() {
+    // return SizedBox(
+    //   height: 50,
+    //   child: Wrap(
+    //     children: [
+    //       TableCalendar(
+    //         calendarFormat: CalendarFormat.week,
+    //         locale: Locale("fr", "FR"),
+    //         firstDay: DateTime.utc(2010, 10, 16),
+    //         lastDay: DateTime.utc(2030, 3, 14),
+    //         focusedDay: DateTime.now(),
+    //         daysOfWeekVisible: false,
+    //       ),
+    //     ],
+    //   )
+    // );
+
+    return Container(
+      child: TextButton(
+        onPressed: () {},
+        child: Text("MÊS / ANO", style: TextStyle(color: Colors.black)),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -212,6 +245,7 @@ class _PanelState extends State<Panel> {
             .push(MaterialPageRoute(builder: (context) => Login()));
       }
     }();
+    _carregaLista();
     atualizaSaldo();
   }
 
@@ -238,9 +272,14 @@ class _PanelState extends State<Panel> {
                 child: Column(
                   children: [
                     _header(),
-                    (TransactionService.tudo.length >= 1) ? _listContainer() : Container()
+                    _calendario(),
+                    Expanded(
+                      child: SingleChildScrollView(
+                          child: (TransactionService.tudo.length >= 1) ? _listContainer() : Container()
+                      ),
+                    )
                   ],
-                ),
+                )
               ),
             ),
           ],

@@ -65,7 +65,7 @@ class TransactionService {
   static Future<bool> atualizaTudo() async {
     try {
       final request = await http.get(Uri.parse(
-          "${_webservice}?user_id=eq.${await UserService.getUserIdByEmail()}&select=*"),
+          "${_webservice}?user_id=eq.${await UserService.getUserIdByEmail()}&order=created_at&select=*"),
           headers: _headers);
 
       List<dynamic> response = json.decode(request.body);
