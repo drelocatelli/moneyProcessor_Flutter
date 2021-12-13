@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:moneyapp/Components/Header.dart';
-import 'package:moneyapp/Components/ListaTudo.dart';
 import 'package:moneyapp/Login.dart';
 import 'package:moneyapp/Service/TransactionService.dart';
 import 'package:moneyapp/Service/UserService.dart';
-import 'package:moneyapp/model/Saldo.dart';
 import 'package:moneyapp/model/Tudo.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -16,9 +14,10 @@ import 'dart:convert';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'Components/Lista.dart';
 import 'Components/MenuFlutuante.dart';
 import 'Components/OptionsMenu.dart';
-import 'Components/TudoLista.dart';
+import 'model/TudoLista.dart';
 import 'Despesa.dart';
 import 'Receita.dart';
 
@@ -31,10 +30,9 @@ class Panel extends StatefulWidget {
 
 class _PanelState extends State<Panel> {
 
-  // void _carregaLista([String? date]) async {
-  //   await TransactionService.atualizaTudo(date ?? null);
-  // }
+  List<Tudo> _lista = [];
 
+  TextEditingController dateInput = TextEditingController();
   String date = "${DateTime.now().month}/${DateTime.now().year}";
 
   Widget _calendario() {
@@ -50,9 +48,7 @@ class _PanelState extends State<Panel> {
                 title: Text("Selecione Mês/Ano"),
                 content: Container(
                   child: TextField(
-                    onChanged: (text) {
-                      date = text;
-                    },
+                    controller: dateInput,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "MM/AAAA"
@@ -65,13 +61,13 @@ class _PanelState extends State<Panel> {
                     child: Text("Cancelar"),
                   ),
                   TextButton(
-                    onPressed: () {
-                      setState(() {
+                    onPressed: () async {
+                      if(regexDate.hasMatch(dateInput.text)) {
+                        date = dateInput.text;
+                        _lista = await TudoLista.lista(date);
+                        setState(() {
 
-                      });
-                      if(regexDate.hasMatch(date)) {
-                        TudoLista.lista(date);
-                        ListaTudo();
+                        });
                         Navigator.of(context).pop();
                       }
 
@@ -97,8 +93,15 @@ class _PanelState extends State<Panel> {
               .push(MaterialPageRoute(builder: (context) => Login()));
         }
       }();
-      TudoLista.lista();
-      Saldo.atualizaSaldo();
+      _carregarLista();
+
+    }
+
+    void _carregarLista() async {
+      _lista = await TudoLista.atualizaLista();
+      setState(() {
+
+      });
     }
 
     @override
@@ -127,7 +130,7 @@ class _PanelState extends State<Panel> {
                         _calendario(),
                         Expanded(
                           child: SingleChildScrollView(
-                              child: (TransactionService.tudo.length >= 1) ? ListaTudo() : Container()
+                              child: Lista(listaItens: _lista),
                           ),
                         )
                       ],

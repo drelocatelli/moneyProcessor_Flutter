@@ -4,7 +4,7 @@ class Tudo {
   String title;
   String type;
   String created_at;
-  double value;
+  String value;
 
   Tudo({
     required this.title,
@@ -17,7 +17,7 @@ class Tudo {
     String? title,
     String? type,
     String? created_at,
-    double? value,
+    String? value,
   }) {
     return Tudo(
       title: title ?? this.title,

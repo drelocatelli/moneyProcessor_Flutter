@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moneyapp/Service/TransactionService.dart';
 import 'package:moneyapp/Service/UserService.dart';
-import 'package:moneyapp/model/Saldo.dart';
 
 import '../Login.dart';
 
@@ -21,7 +20,7 @@ class _OptionsMenuState extends State<OptionsMenu> {
         itemBuilder: (context) => [
           PopupMenuItem(
             onTap: () => {
-              Saldo.atualizaSaldo()
+
             },
             child: Row(
               children: [
@@ -59,7 +58,6 @@ class _OptionsMenuState extends State<OptionsMenu> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Saldo.atualizaSaldo();
   }
 
   @override
