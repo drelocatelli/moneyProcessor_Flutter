@@ -1,23 +1,30 @@
+import 'package:moneyapp/Service/TransactionService.dart';
+
 class Tudo {
   String title;
   String type;
   String created_at;
+  double value;
 
   Tudo({
     required this.title,
     required this.type,
     required this.created_at,
+    required this.value
   });
 
   Tudo copyWith({
     String? title,
     String? type,
     String? created_at,
+    double? value,
   }) {
     return Tudo(
       title: title ?? this.title,
       type: type ?? this.type,
       created_at: created_at ?? this.created_at,
+      value: value ?? this.value,
+
     );
   }
 
@@ -26,6 +33,7 @@ class Tudo {
       'title': title,
       'type': type,
       'created_at': created_at,
+      'value': value
     };
   }
 
@@ -34,6 +42,8 @@ class Tudo {
       title: map['title'] ?? '',
       type: map['type'] ?? '',
       created_at: map['created_at'] ?? '',
+      value: map['value'] ?? '',
+
     );
   }
 }
