@@ -4,13 +4,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:moneyapp/Service/UserService.dart';
+import 'package:moneyapp/model/Tudo.dart';
 
 class TransactionService {
 
   static String _webservice = "${DBConnection.dbHost}/rest/v1/transaction";
   static List<dynamic> despesas = [];
   static List<dynamic> receitas = [];
-  static List<dynamic> tudo = [];
+  static List<Tudo> tudo = [];
 
 
   static Map<String, String> _headers = {
@@ -113,18 +114,19 @@ class TransactionService {
     }
   }
 
-  static Future<bool> atualizaTudo() async {
+  static Future<List<Tudo>> atualizaTudo([String? date]) async {
     try {
+      final String currentDate = date ?? "${DateTime.now().month}/${DateTime.now().year}";
       final request = await http.get(Uri.parse(
-          "${_webservice}?user_id=eq.${await UserService.getUserIdByEmail()}&order=created_at&select=*"),
+          "${_webservice}?user_id=eq.${await UserService.getUserIdByEmail()}&date=eq.${currentDate}&order=created_at&select=*"),
           headers: _headers);
 
-      List<dynamic> response = json.decode(request.body);
-      tudo = response;
+      var response = json.decode(request.body) as List;
+      tudo = response.map((e) => Tudo.fromMap(e)).toList();
 
-      return true;
+      return tudo;
     } catch (err) {
-      return false;
+      return [];
     }
   }
 

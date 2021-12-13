@@ -5,6 +5,7 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:moneyapp/Login.dart';
 import 'package:moneyapp/Service/TransactionService.dart';
 import 'package:moneyapp/Service/UserService.dart';
+import 'package:moneyapp/model/Tudo.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:async';
@@ -128,55 +129,61 @@ class _PanelState extends State<Panel> {
     );
   }
 
-  void _carregaLista() async {
-    await TransactionService.atualizaTudo();
+  void _carregaLista([String? date]) async {
+    await TransactionService.atualizaTudo(date ?? null);
+  }
+
+  Future<List<Tudo>> _lista() async {
+    return await TransactionService.atualizaTudo();
   }
 
   Widget _listContainer() {
     RegExp dateRegex = RegExp(r"(\d){4}-(\d){2}-(\d){2}");
 
-    return ListView.separated(
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: TransactionService.tudo.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-            onTap: () {
-              print("${index}");
-            },
-            child: Container(
-              height: 60,
-              color: Colors.white,
+    return FutureBuilder<List>(future: _lista(), builder: (context, AsyncSnapshot<List> snapshot) {
+      return ListView.separated(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: TransactionService.tudo.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+              onTap: () {
+                print("${index}");
+              },
               child: Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("${TransactionService.tudo[index]["title"]}"),
-                        Text("R\$ ${TransactionService.tudo[index]["value"]}",
-                            style: TextStyle(
-                                color: (TransactionService.tudo[index]["type"] == "d"
-                                    ? Colors.red
-                                    : Colors.green)))
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Text(dateRegex.firstMatch(TransactionService.tudo[index]["created_at"])!.group(0).toString().split('-').reversed.join('/'),
-                          style: TextStyle(fontSize: 12, color: Color.fromRGBO(
-                              179, 179, 179, 1.0))),
-                    )
-                  ],
+                height: 60,
+                color: Colors.white,
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("${snapshot.data?[index].title}"),
+                          Text("R\$ ${snapshot.data?[index].value}",
+                              style: TextStyle(
+                                  color: (snapshot.data?[index].type == "d"
+                                      ? Colors.red
+                                      : Colors.green)))
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text("Atualização: "+dateRegex.firstMatch(snapshot.data?[index].created_at)!.group(0).toString().split('-').reversed.join('/'),
+                            style: TextStyle(fontSize: 12, color: Color.fromRGBO(
+                                179, 179, 179, 1.0))),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ));
-      },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
-    );
+              ));
+        },
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+      );
+    });
   }
 
   Widget _menuFlutuante() {
@@ -215,27 +222,54 @@ class _PanelState extends State<Panel> {
     );
   }
 
-  void _monthYear() {
-    final todayDate = DateTime.now();
-    showDatePicker(
-      context: context,
-      initialDatePickerMode: DatePickerMode.year,
-      initialEntryMode: DatePickerEntryMode.calendar,
-      initialDate: DateTime(todayDate.year - 18, todayDate.month, todayDate.day),
-      firstDate: DateTime(todayDate.year - 90, todayDate.month, todayDate.day),
-      lastDate: DateTime(todayDate.year - 18, todayDate.month, todayDate.day),
-    ).then((value) {
-      print(value);
-    });
-  }
+  String date = "${DateTime.now().month}/${DateTime.now().year}";
 
   Widget _calendario() {
+
+    RegExp regexDate = new RegExp(r"(\d){2}\/(\d){4}");
+
     return Container(
       child: TextButton(
         onPressed: () {
-          _monthYear();
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text("Selecione Mês/Ano"),
+              content: Container(
+                child: TextField(
+                  onChanged: (text) {
+                      date = text;
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "MM/AAAA"
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text("Cancelar"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+
+                    });
+                    if(regexDate.hasMatch(date)) {
+                      _carregaLista(date);
+                      _listContainer();
+                      Navigator.of(context).pop();
+                    }
+
+                  },
+                  child: Text("Confirmar"),
+                )
+              ],
+            )
+          );
         },
-        child: Text("MÊS / ANO", style: TextStyle(color: Colors.black)),
+        child: Text("MÊS ${date}", style: TextStyle(color: Colors.black)),
       ),
     );
   }
