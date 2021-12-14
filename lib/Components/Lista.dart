@@ -67,7 +67,7 @@ class ListaState extends State<Lista> {
                     )
                 );
               },
-            ),
+            )
           );
         }
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moneyapp/Service/TransactionService.dart';
 import 'package:moneyapp/Service/UserService.dart';
 
-import '../Login.dart';
+import '../view/Login.dart';
 
 class OptionsMenu extends StatefulWidget {
   const OptionsMenu({Key? key, required this.atualizaLista, required this.atualizaSaldo}) : super(key: key);
@@ -40,8 +40,8 @@ class _OptionsMenuState extends State<OptionsMenu> {
               UserService.clearSession();
               final navigator = Navigator.of(context);
               await Future.delayed(Duration.zero);
-              navigator.pushReplacement(
-                MaterialPageRoute(builder: (_) => Login()),
+              navigator.pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => Login()), (route) => false,
               );
             },
             child: Row(

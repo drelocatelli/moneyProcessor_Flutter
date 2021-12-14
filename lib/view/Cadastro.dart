@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moneyapp/Login.dart';
+import 'package:moneyapp/view/Login.dart';
 import 'package:get/get.dart';
 
-import 'Service/UserService.dart';
+import '../Service/UserService.dart';
 
 class Cadastro extends StatefulWidget {
   const Cadastro({Key? key}) : super(key: key);

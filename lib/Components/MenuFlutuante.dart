@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
-import '../Despesa.dart';
-import '../Receita.dart';
+import '../view/Despesa.dart';
+import '../view/Receita.dart';
 
 class MenuFlutuante extends StatefulWidget {
   const MenuFlutuante({Key? key}) : super(key: key);

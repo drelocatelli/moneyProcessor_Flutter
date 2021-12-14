@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:moneyapp/Panel.dart';
+import 'package:moneyapp/view/Panel.dart';
 import 'package:moneyapp/Service/UserService.dart';
 
-import 'Service/UserService.dart';
+import '../Service/UserService.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -25,7 +25,7 @@ class _LoginState extends State<Login> {
     if(validateForm && emailExists) {
       bool login = await UserService.login(this._email, this._senha);
       if(login) {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => Panel() ));
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Panel() ), (route) => false);
       }else {
         showDialog(
             context: context,

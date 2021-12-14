@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:moneyapp/Components/Header.dart';
-import 'package:moneyapp/Login.dart';
+import 'package:moneyapp/view/Login.dart';
 import 'package:moneyapp/Service/TransactionService.dart';
 import 'package:moneyapp/Service/UserService.dart';
 import 'package:moneyapp/model/Tudo.dart';
@@ -12,12 +13,11 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:table_calendar/table_calendar.dart';
 
-import 'Components/Lista.dart';
-import 'Components/MenuFlutuante.dart';
-import 'Components/OptionsMenu.dart';
-import 'model/TudoLista.dart';
+import '../Components/Lista.dart';
+import '../Components/MenuFlutuante.dart';
+import '../Components/OptionsMenu.dart';
+import '../model/TudoLista.dart';
 import 'Despesa.dart';
 import 'Receita.dart';
 
@@ -33,11 +33,15 @@ class _PanelState extends State<Panel> {
   List<Tudo> _lista = [];
 
   String date = "${DateTime.now().month}/${DateTime.now().year}";
-  TextEditingController dateInput = TextEditingController(text: "${DateTime.now().month}/${DateTime.now().year}");
+
+  int mesInput = DateTime.now().month;
+  int anoInput = DateTime.now().year;
+
+  late String dateInput;
 
   Widget _calendario() {
 
-    RegExp regexDate = new RegExp(r"(\d){2}\/(\d){4}");
+    RegExp regexDate = new RegExp(r"(\d){1}\/(\d){4}");
 
     return Container(
       child: TextButton(
@@ -47,13 +51,33 @@ class _PanelState extends State<Panel> {
               builder: (context) => AlertDialog(
                 title: Text("Selecione Mês/Ano"),
                 content: Container(
-                  child: TextField(
-                    controller: dateInput,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "MM/AAAA"
-                    ),
-                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SpinBox(
+                        min: 1,
+                        max: 32,
+                        value: mesInput.toDouble(),
+                        onChanged: (text) {
+                          mesInput = text.toInt();
+                          setState(() {
+
+                          });
+                        },
+                      ),
+                      SpinBox(
+                        min: 2000,
+                        max: 2100,
+                        value: anoInput.toDouble(),
+                        onChanged: (text) {
+                          anoInput = text.toInt();
+                          setState(() {
+
+                          });
+                        },
+                      ),
+                    ],
+                  )
                 ),
                 actions: [
                   TextButton(
@@ -62,8 +86,10 @@ class _PanelState extends State<Panel> {
                   ),
                   TextButton(
                     onPressed: () async {
-                      if(regexDate.hasMatch(dateInput.text)) {
-                        date = dateInput.text;
+                      dateInput = "${mesInput}/${anoInput}";
+
+                      if(regexDate.hasMatch(dateInput)) {
+                        date = "${mesInput}/${anoInput}";
                         _lista = await TudoLista.lista(date);
                         setState(() {
 
@@ -83,10 +109,12 @@ class _PanelState extends State<Panel> {
     );
   }
 
-  String saldo = "0.00";
+  String saldo = "R\$ 0.00";
 
   _carregarSaldo() async {
-    saldo = await TransactionService.getSaldoValue();
+    saldo = "(obtendo...)";
+    String saldoApi = await TransactionService.getSaldoValue();
+    saldo = "R\$ ${saldoApi}";
     setState(() {
 
     });
@@ -95,7 +123,7 @@ class _PanelState extends State<Panel> {
   @override
     void initState() {
       super.initState();
-          () async {
+      () async {
         bool checkSession = await UserService.checksession();
         if (!checkSession) {
           Navigator.of(context)

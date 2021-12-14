@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moneyapp/Service/TransactionService.dart';
 import 'package:moneyapp/Service/UserService.dart';
 
-import '../Login.dart';
+import '../view/Login.dart';
 
 class Header extends StatefulWidget {
   const Header({Key? key, required this.saldo, required this.carregarSaldo}) : super(key: key);
@@ -33,7 +33,7 @@ class _HeaderState extends State<Header> {
             ),
             Padding(
               padding: EdgeInsets.only(top: 10),
-              child: Text("Saldo: R\$ ${widget.saldo}",
+              child: Text("Saldo: ${widget.saldo}",
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

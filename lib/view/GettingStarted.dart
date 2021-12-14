@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moneyapp/Cadastro.dart';
-import 'package:moneyapp/Login.dart';
-import 'package:moneyapp/Panel.dart';
-import 'Service/UserService.dart';
+import 'package:moneyapp/view/Cadastro.dart';
+import 'package:moneyapp/view/Login.dart';
+import 'package:moneyapp/view/Panel.dart';
+import '../Service/UserService.dart';
 import 'package:get/get.dart';
-import 'model/Slide.dart';
+import '../model/Slide.dart';
 
 class GettingStarted extends StatefulWidget {
   const GettingStarted({Key? key}) : super(key: key);
@@ -79,12 +79,12 @@ class _GettingStartedState extends State<GettingStarted> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    () async {
-      bool checkSession = await UserService.checksession();
-      if(checkSession) {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => Panel() ));
-      }
-    }();
+    // () async {
+    //   bool checkSession = await UserService.checksession();
+    //   if(checkSession) {
+    //     Navigator.of(context).push(MaterialPageRoute(builder: (context) => Panel() ));
+    //   }
+    // }();
 
   }
 
