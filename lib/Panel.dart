@@ -122,7 +122,7 @@ class _PanelState extends State<Panel> {
             automaticallyImplyLeading: false,
             backgroundColor: Colors.lightBlueAccent,
             actions: [
-              OptionsMenu(atualizaLista: _carregarLista),
+              OptionsMenu(atualizaLista: _carregarLista, atualizaSaldo: _carregarSaldo),
             ],
           ),
           floatingActionButton: MenuFlutuante(),
