@@ -5,7 +5,9 @@ import 'package:moneyapp/Service/UserService.dart';
 import '../Login.dart';
 
 class OptionsMenu extends StatefulWidget {
-  const OptionsMenu({Key? key}) : super(key: key);
+  const OptionsMenu({Key? key, required this.atualizaLista}) : super(key: key);
+
+  final VoidCallback atualizaLista;
 
   @override
   _OptionsMenuState createState() => _OptionsMenuState();
@@ -20,7 +22,7 @@ class _OptionsMenuState extends State<OptionsMenu> {
         itemBuilder: (context) => [
           PopupMenuItem(
             onTap: () => {
-
+              widget.atualizaLista(),
             },
             child: Row(
               children: [

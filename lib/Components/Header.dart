@@ -5,22 +5,17 @@ import 'package:moneyapp/Service/UserService.dart';
 import '../Login.dart';
 
 class Header extends StatefulWidget {
-  const Header({Key? key}) : super(key: key);
+  const Header({Key? key, required this.saldo, required this.carregarSaldo}) : super(key: key);
+
+  final VoidCallback carregarSaldo;
+
+  final String saldo;
 
   @override
   _HeaderState createState() => _HeaderState();
 }
 
 class _HeaderState extends State<Header> {
-
-  String saldo = "0.00";
-
-  _carregarSaldo() async {
-    saldo = await TransactionService.getSaldoValue();
-    setState(() {
-
-    });
-  }
 
   Widget _headerContent() {
     return SizedBox(
@@ -38,7 +33,7 @@ class _HeaderState extends State<Header> {
             ),
             Padding(
               padding: EdgeInsets.only(top: 10),
-              child: Text("Saldo: R\$ ${saldo}",
+              child: Text("Saldo: R\$ ${widget.saldo}",
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -79,7 +74,7 @@ class _HeaderState extends State<Header> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _carregarSaldo();
+    widget.carregarSaldo();
   }
 
   @override

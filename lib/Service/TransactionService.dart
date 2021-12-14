@@ -83,6 +83,18 @@ class TransactionService {
     
   }
 
+  static Future<bool> removeById(int id) async {
+    try{
+
+      final request = await http.delete(Uri.parse(
+          "${_webservice}?id=eq.${id}"), headers: _headers);
+
+      return true;
+    }catch(err) {
+      return false;
+    }
+  }
+
   static Future<bool> atualizaReceitas() async {
     try {
       final request = await http.get(Uri.parse(

@@ -32,8 +32,8 @@ class _PanelState extends State<Panel> {
 
   List<Tudo> _lista = [];
 
-  TextEditingController dateInput = TextEditingController();
   String date = "${DateTime.now().month}/${DateTime.now().year}";
+  TextEditingController dateInput = TextEditingController(text: "${DateTime.now().month}/${DateTime.now().year}");
 
   Widget _calendario() {
 
@@ -83,7 +83,16 @@ class _PanelState extends State<Panel> {
     );
   }
 
-    @override
+  String saldo = "0.00";
+
+  _carregarSaldo() async {
+    saldo = await TransactionService.getSaldoValue();
+    setState(() {
+
+    });
+  }
+
+  @override
     void initState() {
       super.initState();
           () async {
@@ -113,7 +122,7 @@ class _PanelState extends State<Panel> {
             automaticallyImplyLeading: false,
             backgroundColor: Colors.lightBlueAccent,
             actions: [
-              OptionsMenu(),
+              OptionsMenu(atualizaLista: _carregarLista),
             ],
           ),
           floatingActionButton: MenuFlutuante(),
@@ -126,11 +135,11 @@ class _PanelState extends State<Panel> {
                     width: MediaQuery.of(context).size.width,
                     child: Column(
                       children: [
-                        Header(),
+                        Header(saldo: saldo, carregarSaldo: _carregarSaldo),
                         _calendario(),
                         Expanded(
                           child: SingleChildScrollView(
-                              child: Lista(listaItens: _lista),
+                              child: Lista(listaItens: _lista, atualizaLista: _carregarLista, atualizaSaldo: _carregarSaldo,),
                           ),
                         )
                       ],
