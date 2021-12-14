@@ -96,7 +96,7 @@ class _ReceitaState extends State<Receita> {
                 width: 150,
                 child: TextField(
                   textAlign: TextAlign.right,
-                  keyboardType: TextInputType.number,
+                  // keyboardType: TextInputType.number,
                   style: TextStyle(color: Colors.white, fontSize: 28),
                   onChanged: (text) {
                     _value = double.tryParse(text) ?? 0.0;
