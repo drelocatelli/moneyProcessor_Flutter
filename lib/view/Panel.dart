@@ -34,7 +34,7 @@ class _PanelState extends State<Panel> {
 
   String date = "${DateTime.now().month}/${DateTime.now().year}";
 
-  int mesInput = DateTime.now().month;
+  String mesInput = DateTime.now().month.toString();
   int anoInput = DateTime.now().year;
 
   late String dateInput;
@@ -57,9 +57,10 @@ class _PanelState extends State<Panel> {
                       SpinBox(
                         min: 1,
                         max: 32,
-                        value: mesInput.toDouble(),
+                        value: double.parse(mesInput),
                         onChanged: (text) {
-                          mesInput = text.toInt();
+                          String mesSetado = (text.toInt() <= 9) ? "0${text.toInt()}" : text.toInt().toString();
+                          mesInput = mesSetado;
                           setState(() {
 
                           });
