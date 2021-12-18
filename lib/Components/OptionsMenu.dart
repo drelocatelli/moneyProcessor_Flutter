@@ -59,12 +59,6 @@ class _OptionsMenuState extends State<OptionsMenu> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return _optionsMenu();
   }

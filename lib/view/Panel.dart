@@ -30,7 +30,7 @@ class Panel extends StatefulWidget {
 
 class _PanelState extends State<Panel> {
 
-  List<Tudo> _lista = [];
+  List<Tudo> lista = [];
 
   String date = "${DateTime.now().month}/${DateTime.now().year}";
 
@@ -91,7 +91,7 @@ class _PanelState extends State<Panel> {
 
                       if(regexDate.hasMatch(dateInput)) {
                         date = "${mesInput}/${anoInput}";
-                        _lista = await TudoLista.lista(date);
+                        lista = await TudoLista.lista(date);
                         setState(() {
 
                         });
@@ -136,22 +136,26 @@ class _PanelState extends State<Panel> {
     }
 
     void _carregarLista() async {
-      _lista = await TudoLista.atualizaLista();
-      setState(() {
+      lista = await TudoLista.atualizaLista();
+      setState(() { });
+    }
 
-      });
+    void _carregaListaPorData() async {
+      lista = await TudoLista.lista(date);
+      setState(() {});
     }
 
     @override
     Widget build(BuildContext context) {
       return Scaffold(
           appBar: AppBar(
-            shadowColor: Colors.transparent,
+            elevation: 0,
+            // shadowColor: Colors.transparent,
             title: Text("Money Processor"),
             automaticallyImplyLeading: false,
             backgroundColor: Colors.lightBlueAccent,
             actions: [
-              OptionsMenu(atualizaLista: _carregarLista, atualizaSaldo: _carregarSaldo),
+              OptionsMenu(atualizaLista: _carregaListaPorData, atualizaSaldo: _carregarSaldo),
             ],
           ),
           floatingActionButton: MenuFlutuante(),
@@ -168,7 +172,7 @@ class _PanelState extends State<Panel> {
                         _calendario(),
                         Expanded(
                           child: SingleChildScrollView(
-                              child: Lista(listaItens: _lista, atualizaLista: _carregarLista, atualizaSaldo: _carregarSaldo,),
+                              child: Lista(listaItens: lista, atualizaLista: _carregarLista, atualizaSaldo: _carregarSaldo,),
                           ),
                         )
                       ],
