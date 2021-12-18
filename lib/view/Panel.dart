@@ -172,7 +172,7 @@ class _PanelState extends State<Panel> {
                         _calendario(),
                         Expanded(
                           child: SingleChildScrollView(
-                              child: Lista(listaItens: lista, atualizaLista: _carregarLista, atualizaSaldo: _carregarSaldo,),
+                              child: Lista(listaItens: lista, atualizaLista: _carregaListaPorData, atualizaSaldo: _carregarSaldo,),
                           ),
                         )
                       ],

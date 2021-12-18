@@ -80,7 +80,8 @@ class _ReceitaState extends State<Receita> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
-        shadowColor: Colors.transparent,
+        // shadowColor: Colors.transparent,
+        elevation: 0,
         title: Text("Adicionar receita"),
       ),
       body: Column(

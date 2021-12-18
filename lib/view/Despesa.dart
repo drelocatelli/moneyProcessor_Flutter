@@ -79,7 +79,8 @@ class _DespesaState extends State<Despesa> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
-        shadowColor: Colors.transparent,
+        elevation: 0,
+        // shadowColor: Colors.transparent,
         title: Text("Adicionar despesa"),
       ),
       body: Column(

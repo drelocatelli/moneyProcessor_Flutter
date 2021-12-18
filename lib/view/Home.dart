@@ -47,13 +47,13 @@ class _HomeState extends State<Home> {
             SizedBox(
               height: spacing,
             ),
-            CircularProgressIndicator(),
-            SizedBox(
-              height: spacing + 10,
-            ),
             Text("Bem vindo!", style: TextStyle(fontSize: 26, color: Colors.black)),
             SizedBox(
               height: spacing + 30,
+            ),
+            CircularProgressIndicator(),
+            SizedBox(
+              height: spacing + 10,
             ),
             Text("By drelocatelli", style: TextStyle(color: Colors.black))
           ],
